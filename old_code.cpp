@@ -5,10 +5,13 @@
 #include <Windows.h>
 #include <string.h>
 
+void test_search_word_in_string();
 void search_word_in_string(const char* string, int* counter, const char* words[]);
 
 int main()
 {
+	// Тестирование функции
+	test_search_word_in_string();
 
 	// Люблю писать на русском языке
 	setlocale(LC_ALL, "Rus"); // Это для вывода слов
@@ -70,4 +73,39 @@ void search_word_in_string(const char* string, int* counter, const char* words[]
 			i++;
 	}
 
+}
+
+void test_search_word_in_string()
+{
+	setlocale(LC_ALL, "Rus");
+
+	// Тестовые данные
+	char test_strings[5][81] = { "ass ass ass", "\n", "ass", "., ", "ass ass ass ass ass ass ass ass ass ass ass ass ass ass ass ass ass ass ass ass " };
+	const char* words_in_string[40];
+	int counter_words_in_string = 0;
+
+	// Результат
+	int counter[5] = { 3, 0, 1, 0, 20 };
+	int is_ok = 1;
+	char* pointer;
+
+	for (int i = 0; i < 5; i++)
+	{
+		search_word_in_string(test_strings[i], &counter_words_in_string, words_in_string);
+		if (counter_words_in_string != counter[i])
+			is_ok = 0;
+		if (counter[i] == 0)
+			pointer = 0;
+		else
+			pointer = &test_strings[i][0];
+		printf("Тест %d : адрес теста %p, ", i + 1, pointer);
+		printf("адрес ожидаемый %p, количество слов: тестовые %d, ожидаемые %d\n", words_in_string[0], counter_words_in_string, counter[i]);
+		counter_words_in_string = 0;
+		words_in_string[0] = 0;
+	}
+
+	if (is_ok == 0)
+		printf("Что-то пошло не так -_- \n");
+	else
+		printf("Функция работает исправно \n");
 }
